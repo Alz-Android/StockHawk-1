@@ -86,6 +86,16 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
               @Override public void onItemClick(View v, int position) {
                 //TODO:
                 // do something on item click
+//                Toast toast =  Toast.makeText(MyStocksActivity.this, "Item Clicked !!!!!!!",
+//                        Toast.LENGTH_LONG);
+//                toast.setGravity(Gravity.CENTER, Gravity.CENTER, 0);
+//                toast.show();
+
+                Context context = getApplicationContext();
+                Intent detailIntent = new Intent(context, StockDetailActivity.class);
+             //   detailIntent.putExtra("movie", movieId);
+                startActivity(detailIntent);
+
               }
             }));
     recyclerView.setAdapter(mCursorAdapter);
