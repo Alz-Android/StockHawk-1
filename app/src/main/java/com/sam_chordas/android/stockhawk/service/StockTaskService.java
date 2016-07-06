@@ -112,6 +112,8 @@ public class StockTaskService extends GcmTaskService{
       urlString = urlStringBuilder.toString();
       try{
         getResponse = fetchData(urlString);
+        Log.i("StockTaskService", getResponse);
+
         result = GcmNetworkManager.RESULT_SUCCESS;
         try {
           ContentValues contentValues = new ContentValues();
@@ -123,6 +125,7 @@ public class StockTaskService extends GcmTaskService{
           }
           mContext.getContentResolver().applyBatch(QuoteProvider.AUTHORITY,
               Utils.quoteJsonToContentVals(getResponse));
+          Log.i("StockTaskService", Utils.quoteJsonToContentVals(getResponse).toString());
         }catch (RemoteException | OperationApplicationException e){
           Log.e(LOG_TAG, "Error applying batch insert", e);
         }
