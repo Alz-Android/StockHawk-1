@@ -24,6 +24,12 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.facebook.stetho.Stetho;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
@@ -64,6 +70,9 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     private static String dateString;
 
     private ArrayList<StockObject> stockArray = new ArrayList<StockObject>();
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,32 +127,54 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                         Log.i("MyStocksActivity", String.valueOf(cursor.getCount()));
                         Log.i("MyStocksActivity", String.valueOf(cursor.getColumnNames()));
 
+                        LineChart chart = (LineChart) findViewById(R.id.chart);
+                        ArrayList<Entry> valsComp1 = new ArrayList<Entry>();
+                        ArrayList<String> xVals = new ArrayList<String>();
+                        int xIndex=0;
 
                         try {
                             while (cursor.moveToNext()){
 
                                 if (cursor.getString(1)!= null) {
 
-                                    StockObject stockObject = new StockObject(Float.parseFloat(cursor.getString(0)), Utils.FormatDate(cursor.getString(1)));
-                                    stockArray.add(stockObject);
+//                                    StockObject stockObject = new StockObject(Float.parseFloat(cursor.getString(0)), Utils.FormatDate(cursor.getString(1)));
+//                                    stockArray.add(stockObject);
 
                                     Log.i("MyStocksActivity", cursor.getString(0));
-                                    Log.i("MyStocksActivity", String.valueOf(Utils.FormatDate(cursor.getString(1))));   //String.valueOf(Utils.FormatDate(c.getString(1)))));
+                                    Log.i("MyStocksActivity", String.valueOf(Utils.FormatDate(cursor.getString(1))));
+
+
+
+                                    Entry entry = new Entry(Float.valueOf(cursor.getString(0)), xIndex++);
+                                    valsComp1.add(entry);
+
+                                    xVals.add("1.Q");// xVals.add("2.Q"); xVals.add("3.Q"); xVals.add("4.Q");
                                 }
                             }
                         } finally {
                             cursor.close();
                         }
 
-                        Context context = getApplicationContext();
-                        Intent detailIntent = new Intent(context, StockDetailActivity.class);
+                        // Y-axis
+                        LineDataSet setComp1 = new LineDataSet(valsComp1, "Company 1");
+                        setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
 
+                        // X-axis
+                        ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+                        dataSets.add(setComp1);
+
+                        LineData data = new LineData(xVals, dataSets);
+   //                     chart.setData(data);
+
+                        Context context = getApplicationContext();
+
+                        Intent detailIntent = new Intent(context, StockDetailActivity.class);
+                        detailIntent.putExtras(data);
                         startActivity(detailIntent);
 
                     }
                 }));
         recyclerView.setAdapter(mCursorAdapter);
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.attachToRecyclerView(recyclerView);
@@ -187,7 +218,6 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
             }
         });
-
 
         // allows deleting by swipe
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mCursorAdapter);

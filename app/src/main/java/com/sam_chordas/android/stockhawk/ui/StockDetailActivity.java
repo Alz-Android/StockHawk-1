@@ -33,7 +33,6 @@ public class StockDetailActivity extends Activity {
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(true);
 
-
         ArrayList<Entry> valsComp1 = new ArrayList<Entry>();
 
         Entry c1e1 = new Entry(100.000f, 0);
@@ -45,9 +44,11 @@ public class StockDetailActivity extends Activity {
         valsComp1.add(c1e3);
         valsComp1.add(c1e4);
 
+        // Y-axis
         LineDataSet setComp1 = new LineDataSet(valsComp1, "Company 1");
         setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
 
+        // X-axis
         ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
         dataSets.add(setComp1);
 
@@ -55,16 +56,9 @@ public class StockDetailActivity extends Activity {
         xVals.add("1.Q"); xVals.add("2.Q"); xVals.add("3.Q"); xVals.add("4.Q");
 
         LineData data = new LineData(xVals, dataSets);
-
         chart.setData(data);
-
-
-        //chart.clear();
+        // chart.clear();
 
         // chart.getLineData();
-
     }
-
-
-
 }
