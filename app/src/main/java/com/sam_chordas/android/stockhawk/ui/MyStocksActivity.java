@@ -115,63 +115,14 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 //                toast.setGravity(Gravity.CENTER, Gravity.CENTER, 0);
 //                toast.show();
 
-                        Cursor cursor = getContentResolver().query(
-                                QuoteProvider.Quotes.CONTENT_URI,
-                                new String[]{QuoteColumns.BIDPRICE, QuoteColumns.CREATED},
-                                QuoteColumns.SYMBOL + "= ?",
-                                new String[]{"AAPL"},
-                                null);
-
-                        cursor.moveToFirst();
-                        Log.i("MyStocksActivity", cursor.getString(0));
-                        Log.i("MyStocksActivity", String.valueOf(cursor.getCount()));
-                        Log.i("MyStocksActivity", String.valueOf(cursor.getColumnNames()));
-
-                        LineChart chart = (LineChart) findViewById(R.id.chart);
-                        ArrayList<Entry> valsComp1 = new ArrayList<Entry>();
-                        ArrayList<String> xVals = new ArrayList<String>();
-                        int xIndex=0;
-
-                        try {
-                            while (cursor.moveToNext()){
-
-                                if (cursor.getString(1)!= null) {
-
-//                                    StockObject stockObject = new StockObject(Float.parseFloat(cursor.getString(0)), Utils.FormatDate(cursor.getString(1)));
-//                                    stockArray.add(stockObject);
-
-                                    Log.i("MyStocksActivity", cursor.getString(0));
-                                    Log.i("MyStocksActivity", String.valueOf(Utils.FormatDate(cursor.getString(1))));
-
-
-
-                                    Entry entry = new Entry(Float.valueOf(cursor.getString(0)), xIndex++);
-                                    valsComp1.add(entry);
-
-                                    xVals.add("1.Q");// xVals.add("2.Q"); xVals.add("3.Q"); xVals.add("4.Q");
-                                }
-                            }
-                        } finally {
-                            cursor.close();
-                        }
-
-                        // Y-axis
-                        LineDataSet setComp1 = new LineDataSet(valsComp1, "Company 1");
-                        setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
-
-                        // X-axis
-                        ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-                        dataSets.add(setComp1);
-
-                        LineData data = new LineData(xVals, dataSets);
-   //                     chart.setData(data);
-
+                        mCursor.moveToFirst();
+                        mCursor.move(position);
+                        Log.i("MyStocksActivity", mCursor.getString(mCursor.getColumnIndex("symbol")) ); //  mCursorAdapter. getCursor().getColumnIndex("symbol"));
+                        Log.i("MyStocksActivity", String.valueOf(position) );
                         Context context = getApplicationContext();
-
                         Intent detailIntent = new Intent(context, StockDetailActivity.class);
-                        detailIntent.putExtras(data);
+                        detailIntent.putExtra("Stock", mCursor.getString(mCursor.getColumnIndex("symbol")));
                         startActivity(detailIntent);
-
                     }
                 }));
         recyclerView.setAdapter(mCursorAdapter);
@@ -190,7 +141,6 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                                 public void onInput(MaterialDialog dialog, CharSequence input) {
                                     // On FAB click, receive user input. Make sure the stock doesn't already exist
                                     // in the DB and proceed accordingly
-
 
                                     // we're only getting the cursor here to check if we already have the stock
                                     Cursor c = getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,
