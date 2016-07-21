@@ -28,7 +28,7 @@ public class StockDetailActivity extends Activity {
 
         setContentView(R.layout.activity_stock_detail);
 
-        String stock = getIntent(). getStringExtra("Stock");
+        String stock = getIntent().getStringExtra("Stock");
 
         Cursor cursor = getContentResolver().query(
                 QuoteProvider.Quotes.CONTENT_URI,

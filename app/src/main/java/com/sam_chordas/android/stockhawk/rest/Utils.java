@@ -1,7 +1,9 @@
 package com.sam_chordas.android.stockhawk.rest;
 
 import android.content.ContentProviderOperation;
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
@@ -10,9 +12,7 @@ import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +26,7 @@ public class Utils {
     public static boolean showPercent = true;
     private static String LOG_TAG = Utils.class.getSimpleName();
     private static String dateString;
+
 
 
     public static float FormatDate(String dateString) {
@@ -72,15 +73,15 @@ public class Utils {
                 SimpleDateFormat month = new SimpleDateFormat("MM");
                 SimpleDateFormat days = new SimpleDateFormat("dd");
                 SimpleDateFormat hours = new SimpleDateFormat("HH");
-                Log.i("Utils1", month.format(date));
-                Log.i("Utils1", days.format(date));
-                Log.i("Utils1", hours.format(date));
+//                Log.i("Utils1", month.format(date));
+//                Log.i("Utils1", days.format(date));
+//                Log.i("Utils1", hours.format(date));
 
                 // there's only one stock
                 if (count == 1) {
                     jsonObject = jsonObject.getJSONObject("results").getJSONObject("quote");
-
                     batchOperations.add(buildBatchOperation(jsonObject));
+
                 } else {
                     resultsArray = jsonObject.getJSONObject("results").getJSONArray("quote");
 
