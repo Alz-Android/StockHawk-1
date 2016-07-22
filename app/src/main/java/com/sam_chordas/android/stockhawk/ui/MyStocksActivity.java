@@ -117,10 +117,9 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
                         mCursor.moveToFirst();
                         mCursor.move(position);
-                        Log.i("MyStocksActivity", mCursor.getString(mCursor.getColumnIndex("symbol")) ); //  mCursorAdapter. getCursor().getColumnIndex("symbol"));
+                        Log.i("MyStocksActivity", mCursor.getString(mCursor.getColumnIndex("symbol")) );
                         Log.i("MyStocksActivity", String.valueOf(position) );
-                        Context context = getApplicationContext();
-                        Intent detailIntent = new Intent(context, StockDetailActivity.class);
+                        Intent detailIntent = new Intent(mContext, StockDetailActivity.class);
                         detailIntent.putExtra("Stock", mCursor.getString(mCursor.getColumnIndex("symbol")));
                         startActivity(detailIntent);
                     }
@@ -129,6 +128,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.attachToRecyclerView(recyclerView);
+        Log.i("MyStocksActivity", "FAB attached" );
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,7 +165,6 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                 } else {
                     networkToast();
                 }
-
             }
         });
 

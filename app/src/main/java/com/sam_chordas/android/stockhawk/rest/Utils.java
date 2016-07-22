@@ -26,8 +26,11 @@ public class Utils {
     public static boolean showPercent = true;
     private static String LOG_TAG = Utils.class.getSimpleName();
     private static String dateString;
+    private static Context mContext;
 
-
+    public Utils(Context context) {
+        mContext = context;
+    }
 
     public static float FormatDate(String dateString) {
 
@@ -80,8 +83,17 @@ public class Utils {
                 // there's only one stock
                 if (count == 1) {
                     jsonObject = jsonObject.getJSONObject("results").getJSONObject("quote");
-                    batchOperations.add(buildBatchOperation(jsonObject));
 
+                    Log.i("StockTaskService1", jsonObject.getString("Bid"));
+                    if ((jsonObject.getString("Bid")).equals("null")) {
+                        //               Log.i("StockTaskService", jsonObject.getString("Bid"));
+                        Log.i("StockTaskService", "That stock does not exist");
+                        Toast.makeText(mContext, "That stock does not exist",
+                                Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        batchOperations.add(buildBatchOperation(jsonObject));
+                    }
                 } else {
                     resultsArray = jsonObject.getJSONObject("results").getJSONArray("quote");
 
