@@ -199,13 +199,12 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     }
 
 
-    public static void noStockToast()
+    public static void noStockToast(final Context context)
     {
-        final Context fContext = mContext;
         runOnUiThread(new Runnable() {
         public void run()
         {
-            Toast.makeText(mContext, "That stock does not exist",
+            Toast.makeText(context, "That stock does not exist",
                     Toast.LENGTH_LONG).show();
         }
     });

@@ -88,7 +88,7 @@ public class Utils {
                     Log.i("StockTaskService1", jsonObject.getString("Bid"));
                     if ((jsonObject.getString("Bid")).equals("null")) {
                         Log.i("StockTaskService", "That stock does not exist");
-                        MyStocksActivity.noStockToast();
+                        MyStocksActivity.noStockToast(context);
                     }
                     else{
                         batchOperations.add(buildBatchOperation(jsonObject));
