@@ -67,12 +67,9 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     private Cursor mCursor;
     boolean isConnected;
 
-    private static String dateString;
+//    private static String dateString;
 
     private ArrayList<StockObject> stockArray = new ArrayList<StockObject>();
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +83,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
+
         setContentView(R.layout.activity_my_stocks);
         // The intent service is for executing immediate pulls from the Yahoo API
         // GCMTaskService can only schedule tasks, they cannot execute immediately
@@ -108,12 +106,6 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                 new RecyclerViewItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View v, int position) {
-                        //TODO:
-                        // do something on item click
-//                Toast toast =  Toast.makeText(MyStocksActivity.this, "Item Clicked !!!!!!!",
-//                        Toast.LENGTH_LONG);
-//                toast.setGravity(Gravity.CENTER, Gravity.CENTER, 0);
-//                toast.show();
 
                         mCursor.moveToFirst();
                         mCursor.move(position);

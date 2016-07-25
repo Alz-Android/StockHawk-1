@@ -5,7 +5,6 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 
@@ -26,11 +25,11 @@ public class Utils {
     public static boolean showPercent = true;
     private static String LOG_TAG = Utils.class.getSimpleName();
     private static String dateString;
-    private static Context mContext;
-
-    public Utils(Context context) {
-        mContext = context;
-    }
+//    private static Context mContext;
+//
+//    public Utils(Context context) {
+//        mContext = context;
+//    }
 
     public static float FormatDate(String dateString) {
 
@@ -59,7 +58,7 @@ public class Utils {
         return dateGraphPoint;
     }
 
-    public static ArrayList quoteJsonToContentVals(String JSON) {
+    public static ArrayList quoteJsonToContentVals(String JSON, Context context) {
         ArrayList<ContentProviderOperation> batchOperations = new ArrayList<>();
         JSONObject jsonObject = null;
         JSONArray resultsArray = null;
@@ -86,9 +85,8 @@ public class Utils {
 
                     Log.i("StockTaskService1", jsonObject.getString("Bid"));
                     if ((jsonObject.getString("Bid")).equals("null")) {
-                        //               Log.i("StockTaskService", jsonObject.getString("Bid"));
                         Log.i("StockTaskService", "That stock does not exist");
-                        Toast.makeText(mContext, "That stock does not exist",
+                        Toast.makeText(context, "That stock does not exist",
                                 Toast.LENGTH_LONG).show();
                     }
                     else{
