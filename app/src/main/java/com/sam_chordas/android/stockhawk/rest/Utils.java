@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
+import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -58,10 +59,11 @@ public class Utils {
         return dateGraphPoint;
     }
 
-    public static ArrayList quoteJsonToContentVals(String JSON, Context context) {
+    public static ArrayList quoteJsonToContentVals(String JSON, final Context context) {
         ArrayList<ContentProviderOperation> batchOperations = new ArrayList<>();
         JSONObject jsonObject = null;
         JSONArray resultsArray = null;
+
         try {
             jsonObject = new JSONObject(JSON);
             if (jsonObject != null && jsonObject.length() != 0) {
@@ -86,8 +88,7 @@ public class Utils {
                     Log.i("StockTaskService1", jsonObject.getString("Bid"));
                     if ((jsonObject.getString("Bid")).equals("null")) {
                         Log.i("StockTaskService", "That stock does not exist");
-                        Toast.makeText(context, "That stock does not exist",
-                                Toast.LENGTH_LONG).show();
+                        MyStocksActivity.noStockToast();
                     }
                     else{
                         batchOperations.add(buildBatchOperation(jsonObject));

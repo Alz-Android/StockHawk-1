@@ -198,6 +198,19 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
         Toast.makeText(mContext, getString(R.string.network_toast), Toast.LENGTH_SHORT).show();
     }
 
+
+    public static void noStockToast()
+    {
+        final Context fContext = mContext;
+        runOnUiThread(new Runnable() {
+        public void run()
+        {
+            Toast.makeText(mContext, "That stock does not exist",
+                    Toast.LENGTH_LONG).show();
+        }
+    });
+    }
+
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
