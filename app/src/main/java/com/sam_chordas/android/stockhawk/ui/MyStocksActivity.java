@@ -8,6 +8,8 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
@@ -196,18 +198,6 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
     public void networkToast() {
         Toast.makeText(mContext, getString(R.string.network_toast), Toast.LENGTH_SHORT).show();
-    }
-
-
-    public static void noStockToast(final Context context)
-    {
-        runOnUiThread(new Runnable() {
-        public void run()
-        {
-            Toast.makeText(context, "That stock does not exist",
-                    Toast.LENGTH_LONG).show();
-        }
-    });
     }
 
     public void restoreActionBar() {

@@ -2,6 +2,8 @@ package com.sam_chordas.android.stockhawk.rest;
 
 import android.content.ContentProviderOperation;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -88,7 +90,7 @@ public class Utils {
                     Log.i("StockTaskService1", jsonObject.getString("Bid"));
                     if ((jsonObject.getString("Bid")).equals("null")) {
                         Log.i("StockTaskService", "That stock does not exist");
-                        MyStocksActivity.noStockToast(context);
+                        noStockToast(context);
                     }
                     else{
                         batchOperations.add(buildBatchOperation(jsonObject));
@@ -164,4 +166,17 @@ public class Utils {
         }
         return builder.build();
     }
+
+    public static void noStockToast(final Context context)
+    {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            public void run()
+            {
+                Toast.makeText(context, "That stock does not exist",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 }
