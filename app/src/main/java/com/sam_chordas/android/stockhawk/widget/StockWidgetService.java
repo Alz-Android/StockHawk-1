@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -24,6 +25,7 @@ public class StockWidgetService extends RemoteViewsService {
 
             @Override
             public void onCreate() {
+                Log.i("StockWidget1","onCreate");
                 // Nothing to do
             }
 
@@ -63,6 +65,8 @@ public class StockWidgetService extends RemoteViewsService {
 
             @Override
             public RemoteViews getViewAt(int position) {
+
+                Log.i("StockWidget1","getViewAt1");
                 if (position == AdapterView.INVALID_POSITION ||
                         data == null || !data.moveToPosition(position)) {
                     return null;
@@ -82,6 +86,8 @@ public class StockWidgetService extends RemoteViewsService {
                 Uri stockUri = QuoteProvider.Quotes.CONTENT_URI;
 
                 fillInIntent.setData(stockUri);
+
+                Log.i("StockWidget1","getViewAt2");
                 views.setOnClickFillInIntent(R.id.widget_list_item, fillInIntent);
                 return views;
             }
@@ -93,6 +99,7 @@ public class StockWidgetService extends RemoteViewsService {
 
             @Override
             public RemoteViews getLoadingView() {
+
                 return new RemoteViews(getPackageName(), R.layout.widget_detail_list_item);
             }
 
@@ -105,6 +112,7 @@ public class StockWidgetService extends RemoteViewsService {
             // TODO: return proper ID
             @Override
             public long getItemId(int position) {
+                Log.i("StockWidget1","getItemId");
                 if (data.moveToPosition(position))
                     return data.getLong(0);
                 return position;
