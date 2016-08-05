@@ -48,9 +48,7 @@ public class ListViewWidgetService extends RemoteViewsService {
                 // feed row
 
                 String data = records.get(position);
-
-
-                rv.setTextViewText(R.id.item, data);
+                rv.setTextViewText(R.id.stock_symbol, data);
 
                 // end feed row
                 // Next, set a fill-intent, which will be used to fill in the pending intent template
@@ -94,13 +92,11 @@ public class ListViewWidgetService extends RemoteViewsService {
                 cursor.moveToFirst();
                 Log.i("ListViewWidgetService", String.valueOf(cursor.getCount()));
                 try {
+                    cursor.moveToPosition(-1);
                     while (cursor.moveToNext()) {
-                        if (cursor.getString(1) != null) {
-                            Log.i("ListViewWidgetService", cursor.getString(0));
-                            Log.i("ListViewWidgetService", cursor.getString(1));
-                            Log.i("ListViewWidgetService", cursor.getString(2));
-     //                       records.add("");
-                        }
+                            records.add(cursor.getString(0));
+                            records.add(cursor.getString(1));
+                            records.add(cursor.getString(2));
                     }
                 } finally {
                     cursor.close();

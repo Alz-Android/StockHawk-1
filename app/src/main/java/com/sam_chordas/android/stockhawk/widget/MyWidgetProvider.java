@@ -22,6 +22,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
 
     public void onReceive(Context context, Intent intent) {
 
+        Log.i("MyWidgetProvider", "onReceive");
         AppWidgetManager mgr = AppWidgetManager.getInstance(context);
         if (intent.getAction().equals(UPDATE_MEETING_ACTION)) {
             int appWidgetIds[] = mgr.getAppWidgetIds(new ComponentName(context, MyWidgetProvider.class));
@@ -38,7 +39,7 @@ public class MyWidgetProvider extends AppWidgetProvider {
         for (int i = 0; i < appWidgetIds.length; ++i) {
             // Set up the intent that starts the ListViewService, which will
             // provide the views for this collection.
-
+            Log.i("MyWidgetProvider", "onUpdate :");
             Intent intent = new Intent(context, ListViewWidgetService.class);
 
             // Add the app widget ID to the intent extras.
