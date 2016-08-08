@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:divider="@null"
         android:dividerHeight="0dp"
-        tools:listitem="@layout/widget_detail_list_item"/>
+        tools:listitem="@layout/list_item_quote"/>
 
     <TextView
         android:id="@+id/empty_view"
@@ -20,7 +20,7 @@
         style="@android:style/TextAppearance.Medium"
         android:layout_gravity="center"
         android:layout_margin="4dp"
-        android:text="No meeting"
+        android:text="No Data"
         />
 
 </LinearLayout>

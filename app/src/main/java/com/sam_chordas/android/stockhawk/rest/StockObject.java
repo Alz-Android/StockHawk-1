@@ -5,29 +5,37 @@ package com.sam_chordas.android.stockhawk.rest;
  */
 public class StockObject {
 
-    private float stockPrice;
-    private float dateTime;
+    private String symbol;
+    private String bidPrice;
+    private String change;
 
-    public StockObject(float stockPrice, float dateTime) {
-        this.stockPrice = stockPrice;
-        this.dateTime = dateTime;
+    public StockObject(String symbol, String bidPrice, String change) {
+        this.symbol = symbol;
+        this.bidPrice = bidPrice;
+        this.change = change;
     }
 
-    public float getDateTime() {
-
-        return dateTime;
+    public String getSymbol() {
+        return symbol;
     }
 
-    public void setDateTime(float dateTime) {
-        this.dateTime = dateTime;
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
-    public float getStockPrice() {
-
-        return stockPrice;
+    public String getBidPrice() {
+        return bidPrice;
     }
 
-    public void setStockPrice(float stockPrice) {
-        this.stockPrice = stockPrice;
+    public void setBidPrice(String bidPrice) {
+        this.bidPrice = bidPrice;
+    }
+
+    public String getChange() {
+        return change;
+    }
+
+    public void setChange(String change) {
+        this.change = change;
     }
 }

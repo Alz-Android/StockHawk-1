@@ -11,6 +11,7 @@ import android.widget.RemoteViewsService;
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
+import com.sam_chordas.android.stockhawk.rest.StockObject;
 
 import java.util.ArrayList;
 
@@ -23,7 +24,9 @@ public class ListViewWidgetService extends RemoteViewsService {
         return new RemoteViewsFactory() {
 
             private Cursor cursor = null;
-            private ArrayList<String> records;
+            private ArrayList<StockObject> records;
+
+            private ArrayList<StockObject> stockArray = new ArrayList<StockObject>();
 
             // Initialize the data set.
             public void onCreate() {
@@ -32,7 +35,7 @@ public class ListViewWidgetService extends RemoteViewsService {
                 // In onCreate() you set up any connections / cursors to your data source. Heavy lifting,
                 // for example downloading or creating content etc, should be deferred to onDataSetChanged()
                 // or getViewAt(). Taking more than 20 seconds in this call will result in an ANR.
-                records = new ArrayList<String>();
+                records = new ArrayList<StockObject>();
             }
             // Given the position (index) of a WidgetItem in the array, use the item's text value in
             // cobination with the app widget item XML file to construct a RemoteViews object.
@@ -47,19 +50,16 @@ public class ListViewWidgetService extends RemoteViewsService {
                 RemoteViews rv = new RemoteViews(getPackageName(), R.layout.widget_detail_list_item);
                 // feed row
 
-                String data = records.get(position);
-                rv.setTextViewText(R.id.stock_symbol, data);
+                rv.setTextViewText(R.id.stock_symbol, records.get(position).getSymbol());
+                rv.setTextViewText(R.id.bid_price, records.get(position).getBidPrice());
+                rv.setTextViewText(R.id.change, records.get(position).getChange());
 
                 // end feed row
                 // Next, set a fill-intent, which will be used to fill in the pending intent template
                 // that is set on the collection view in ListViewWidgetProvider.
 
-                Bundle extras = new Bundle();
-                extras.putInt(MyWidgetProvider.EXTRA_ITEM, position);
                 Intent fillInIntent = new Intent();
-                fillInIntent.putExtra("stock_info", data);
-                fillInIntent.putExtras(extras);
-
+                fillInIntent.setData(QuoteProvider.Quotes.CONTENT_URI);
                 // Make it possible to distinguish the individual on-click
                 // action of a given item
                 rv.setOnClickFillInIntent(R.id.widget_list_item, fillInIntent);
@@ -94,9 +94,7 @@ public class ListViewWidgetService extends RemoteViewsService {
                 try {
                     cursor.moveToPosition(-1);
                     while (cursor.moveToNext()) {
-                            records.add(cursor.getString(0));
-                            records.add(cursor.getString(1));
-                            records.add(cursor.getString(2));
+                            records.add(new StockObject(cursor.getString(0),cursor.getString(1),cursor.getString(2)) );
                     }
                 } finally {
                     cursor.close();

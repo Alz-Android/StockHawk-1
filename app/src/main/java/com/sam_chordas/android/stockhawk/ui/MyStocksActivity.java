@@ -69,10 +69,6 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     private Cursor mCursor;
     boolean isConnected;
 
-//    private static String dateString;
-
-    private ArrayList<StockObject> stockArray = new ArrayList<StockObject>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
