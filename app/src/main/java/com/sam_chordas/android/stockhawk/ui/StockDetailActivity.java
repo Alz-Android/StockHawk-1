@@ -17,8 +17,17 @@ import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 import com.sam_chordas.android.stockhawk.rest.Utils;
+import com.sam_chordas.android.stockhawk.retrofit.GetHistoricalData;
+import com.sam_chordas.android.stockhawk.retrofit.HistoricalData;
+import com.sam_chordas.android.stockhawk.retrofit.HistoricalDataStockApi;
+import com.sam_chordas.android.stockhawk.retrofit.Quote;
+import com.sam_chordas.android.stockhawk.retrofit.ServiceGenerator;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class StockDetailActivity extends Activity {
 
@@ -30,44 +39,46 @@ public class StockDetailActivity extends Activity {
 
         String stock = getIntent().getStringExtra("Stock");
 
-        Cursor cursor = getContentResolver().query(
-                QuoteProvider.Quotes.CONTENT_URI,
-                new String[]{QuoteColumns.BIDPRICE, QuoteColumns.CREATED},
-                QuoteColumns.SYMBOL + "= ?",
-                new String[]{stock},
-                null);
-
-        cursor.moveToFirst();
-        Log.i("StockDetailActivity", cursor.getString(0));
-        Log.i("StockDetailActivity", String.valueOf(cursor.getCount()));
-        Log.i("StockDetailActivity", String.valueOf(cursor.getColumnNames()));
-        Log.i("StockDetailActivity1", String.valueOf(stock));
 
         ArrayList<Entry> valsComp1 = new ArrayList<Entry>();
         ArrayList<String> xVals = new ArrayList<String>();
-        int xIndex=0;
 
-        try {
-            while (cursor.moveToNext()){
+        // Get Historical data using Retrofit
+        HistoricalDataStockApi stockService = ServiceGenerator.createService(HistoricalDataStockApi.class);
+        Call<HistoricalData> call = stockService.STOCK_LIST_CALL();
+        Log.i("sort1", "update11");
 
-                if (cursor.getString(1)!= null) {
+        call.enqueue(new Callback<HistoricalData>() {
+            @Override
+            public void onResponse(Call<HistoricalData> call, Response<HistoricalData> response) {
+                Log.i("sort1", "update112");
+                if (response.isSuccess()) {
+                    Log.i("sort1", "update2");
+                    for (int i = 0; i < response.body().query.results.quote.size(); i++) {
+                        String stockQuote   = response.body().query.results.quote.get(i).close;
+                        String date         = response.body().query.results.quote.get(i).date;
+                        Entry entry = new Entry(Float.valueOf(stockQuote), i);
+ //                       valsComp1.add(entry);
 
-//                                    StockObject stockObject = new StockObject(Float.parseFloat(cursor.getString(0)), Utils.FormatDate(cursor.getString(1)));
-//                                    stockArray.add(stockObject);
+                        Log.i("sortid", date);
+                    }
 
-                    Log.i("StockDetailActivity", cursor.getString(0));
-                    Log.i("StockDetailActivity", String.valueOf(Utils.FormatDate(cursor.getString(1))));
-
-                    Entry entry = new Entry(Float.valueOf(cursor.getString(0)), xIndex++);
-                    valsComp1.add(entry);
-
-                    xVals.add("1.Q");// xVals.add("2.Q"); xVals.add("3.Q"); xVals.add("4.Q");
+                } else {
+                    Log.i("sort1", "update Error");
+                    // error response, no access to resource?
                 }
             }
-        } finally {
-            cursor.close();
-        }
 
+            @Override
+            public void onFailure(Call<HistoricalData> call, Throwable t) {
+                // something went completely south (like no internet connection)
+                Log.d("sort1", t.getMessage());
+            }
+        });
+
+
+
+        xVals.add("1.Q");
 
         LineChart chart = (LineChart) findViewById(R.id.chart);
         YAxis leftAxis = chart.getAxisLeft();
@@ -79,17 +90,6 @@ public class StockDetailActivity extends Activity {
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(true);
 
-
-
-//        Entry c1e1 = new Entry(100.000f, 0);
-//        Entry c1e2 = new Entry(10.000f, 1);
-//        Entry c1e3 = new Entry(200.000f, 1);
-//        Entry c1e4 = new Entry(300.000f, 2);// 0 == quarter 1
-//        valsComp1.add(c1e1);
-//        valsComp1.add(c1e2);
-//        valsComp1.add(c1e3);
-//        valsComp1.add(c1e4);
-
         // Y-axis
         LineDataSet setComp1 = new LineDataSet(valsComp1, "Company 1");
         setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
@@ -97,9 +97,6 @@ public class StockDetailActivity extends Activity {
         // X-axis
         ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
         dataSets.add(setComp1);
-
-
- //       xVals.add("1.Q"); xVals.add("2.Q"); xVals.add("3.Q"); xVals.add("4.Q");
 
         LineData data = new LineData(xVals, dataSets);
         chart.setData(data);

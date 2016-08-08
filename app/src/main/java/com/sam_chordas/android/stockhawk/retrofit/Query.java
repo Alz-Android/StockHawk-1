@@ -21,5 +21,4 @@ public class Query {
     @SerializedName("results")
     @Expose
     public Results results;
-
 }

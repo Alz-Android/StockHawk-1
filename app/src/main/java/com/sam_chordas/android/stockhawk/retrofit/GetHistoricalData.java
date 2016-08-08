@@ -15,7 +15,7 @@ import retrofit2.Response;
 public class GetHistoricalData {
 
 
- //   private Context mContext;
+    //   private Context mContext;
     public GetHistoricalData(String stockSymbol) {
         Log.i("sort1", "update1");
 
@@ -25,7 +25,7 @@ public class GetHistoricalData {
 
         HistoricalDataStockApi stockService = ServiceGenerator.createService(HistoricalDataStockApi.class);
 
-        Call<HistoricalData> call = stockService.STOCK_LIST_CALL(stockSymbol);
+        Call<HistoricalData> call = stockService.STOCK_LIST_CALL();
         Log.i("sort1", "update11");
 
         call.enqueue(new Callback<HistoricalData>() {
@@ -35,16 +35,17 @@ public class GetHistoricalData {
                 if (response.isSuccess()) {
                     Log.i("sort1", "update2");
                     for (int i = 0; i < response.body().query.results.quote.size(); i++) {
+                        Quote stockQuote = (Quote) response.body().query.results.quote.get(i);
+                        String date = stockQuote.date;
+                        Log.i("sortid", stockQuote.close.toString());
+                    }
 
-                        Quote stockQuote = (Quote)response.body().query.results.quote.get(i);
-                        Log.i("sortid", "update4");
-                                                }
-                    Log.i("sort1", response.headers().toString());
                 } else {
                     Log.i("sort1", "update Error");
                     // error response, no access to resource?
                 }
             }
+
             @Override
             public void onFailure(Call<HistoricalData> call, Throwable t) {
                 // something went completely south (like no internet connection)

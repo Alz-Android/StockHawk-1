@@ -110,14 +110,9 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                         mCursor.move(position);
                         Log.i("MyStocksActivity", mCursor.getString(mCursor.getColumnIndex("symbol")) );
                         Log.i("MyStocksActivity", String.valueOf(position) );
-//                        Intent detailIntent = new Intent(mContext, StockDetailActivity.class);
-//                        detailIntent.putExtra("Stock", mCursor.getString(mCursor.getColumnIndex("symbol")));
-//                        startActivity(detailIntent);
-
-                        GetHistoricalData historicalData = new GetHistoricalData("AAPL");
-                        Log.i("MyStocksActivity", "historicalData" );
-
-
+                        Intent detailIntent = new Intent(mContext, StockDetailActivity.class);
+                        detailIntent.putExtra("Stock", mCursor.getString(mCursor.getColumnIndex("symbol")));
+                        startActivity(detailIntent);
                     }
                 }));
         recyclerView.setAdapter(mCursorAdapter);
