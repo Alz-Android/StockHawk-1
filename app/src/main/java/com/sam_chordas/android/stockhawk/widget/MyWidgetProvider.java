@@ -17,20 +17,18 @@ import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
 
 public class MyWidgetProvider extends AppWidgetProvider {
 
-    public static final String UPDATE_MEETING_ACTION = "android.appwidget.action.APPWIDGET_UPDATE";
-    public static final String EXTRA_ITEM = "com.example.edockh.EXTRA_ITEM";
+    public static final String UPDATE_ACTION = "android.appwidget.action.APPWIDGET_UPDATE";
 
-    public void onReceive(Context context, Intent intent) {
-
-        Log.i("MyWidgetProvider", "onReceive");
-        AppWidgetManager mgr = AppWidgetManager.getInstance(context);
-        if (intent.getAction().equals(UPDATE_MEETING_ACTION)) {
-            int appWidgetIds[] = mgr.getAppWidgetIds(new ComponentName(context, MyWidgetProvider.class));
-            Log.e("received", intent.getAction());
-            mgr.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.list_view);
-        }
-        super.onReceive(context, intent);
-    }
+//    public void onReceive(Context context, Intent intent) {
+//
+//        Log.i("MyWidgetProvider", "onReceive");
+//        AppWidgetManager mgr = AppWidgetManager.getInstance(context);
+//        if (intent.getAction().equals(UPDATE_ACTION)) {
+//            int appWidgetIds[] = mgr.getAppWidgetIds(new ComponentName(context, MyWidgetProvider.class));
+//            Log.e("received", intent.getAction());
+//        }
+//        super.onReceive(context, intent);
+//    }
 
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
                          int[] appWidgetIds) {

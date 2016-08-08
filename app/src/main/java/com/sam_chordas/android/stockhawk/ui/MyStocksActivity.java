@@ -39,6 +39,7 @@ import com.sam_chordas.android.stockhawk.rest.QuoteCursorAdapter;
 import com.sam_chordas.android.stockhawk.rest.RecyclerViewItemClickListener;
 import com.sam_chordas.android.stockhawk.rest.StockObject;
 import com.sam_chordas.android.stockhawk.rest.Utils;
+import com.sam_chordas.android.stockhawk.retrofit.GetHistoricalData;
 import com.sam_chordas.android.stockhawk.service.StockIntentService;
 import com.sam_chordas.android.stockhawk.service.StockTaskService;
 import com.google.android.gms.gcm.GcmNetworkManager;
@@ -109,9 +110,14 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                         mCursor.move(position);
                         Log.i("MyStocksActivity", mCursor.getString(mCursor.getColumnIndex("symbol")) );
                         Log.i("MyStocksActivity", String.valueOf(position) );
-                        Intent detailIntent = new Intent(mContext, StockDetailActivity.class);
-                        detailIntent.putExtra("Stock", mCursor.getString(mCursor.getColumnIndex("symbol")));
-                        startActivity(detailIntent);
+//                        Intent detailIntent = new Intent(mContext, StockDetailActivity.class);
+//                        detailIntent.putExtra("Stock", mCursor.getString(mCursor.getColumnIndex("symbol")));
+//                        startActivity(detailIntent);
+
+                        GetHistoricalData historicalData = new GetHistoricalData("AAPL");
+                        Log.i("MyStocksActivity", "historicalData" );
+
+
                     }
                 }));
         recyclerView.setAdapter(mCursorAdapter);
