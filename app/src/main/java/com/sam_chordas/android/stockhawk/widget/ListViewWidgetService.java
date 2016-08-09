@@ -52,6 +52,7 @@ public class ListViewWidgetService extends RemoteViewsService {
 
                 rv.setTextViewText(R.id.stock_symbol, records.get(position).getSymbol());
                 rv.setTextViewText(R.id.bid_price, records.get(position).getBidPrice());
+
                 rv.setTextViewText(R.id.change, records.get(position).getChange());
 
                 // end feed row

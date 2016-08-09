@@ -14,13 +14,8 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.sam_chordas.android.stockhawk.R;
-import com.sam_chordas.android.stockhawk.data.QuoteColumns;
-import com.sam_chordas.android.stockhawk.data.QuoteProvider;
-import com.sam_chordas.android.stockhawk.rest.Utils;
-import com.sam_chordas.android.stockhawk.retrofit.GetHistoricalData;
 import com.sam_chordas.android.stockhawk.retrofit.HistoricalData;
 import com.sam_chordas.android.stockhawk.retrofit.HistoricalDataStockApi;
-import com.sam_chordas.android.stockhawk.retrofit.Quote;
 import com.sam_chordas.android.stockhawk.retrofit.ServiceGenerator;
 
 import java.util.ArrayList;
@@ -35,36 +30,62 @@ public class StockDetailActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_stock_detail);
-
-        String stock = getIntent().getStringExtra("Stock");
 
 
-        ArrayList<Entry> valsComp1 = new ArrayList<Entry>();
-        ArrayList<String> xVals = new ArrayList<String>();
+        final String stock_symbol = getIntent().getStringExtra("Stock");
 
         // Get Historical data using Retrofit
         HistoricalDataStockApi stockService = ServiceGenerator.createService(HistoricalDataStockApi.class);
-        Call<HistoricalData> call = stockService.STOCK_LIST_CALL();
-        Log.i("sort1", "update11");
+        String query = "select * from yahoo.finance.historicaldata where symbol='" + stock_symbol + "' and startDate = '2016-06-09' and endDate = '2016-06-19'" ;
+
+        Call<HistoricalData> call = stockService.STOCK_LIST_CALL(query);
+        Log.i("sort1", query);
 
         call.enqueue(new Callback<HistoricalData>() {
             @Override
             public void onResponse(Call<HistoricalData> call, Response<HistoricalData> response) {
-                Log.i("sort1", "update112");
+
+                setContentView(R.layout.activity_stock_detail);
+
+                ArrayList<Entry> valsComp1 = new ArrayList<Entry>();
+                ArrayList<String> xVals = new ArrayList<String>();
                 if (response.isSuccess()) {
                     Log.i("sort1", "update2");
                     for (int i = 0; i < response.body().query.results.quote.size(); i++) {
                         String stockQuote   = response.body().query.results.quote.get(i).close;
                         String date         = response.body().query.results.quote.get(i).date;
-                        Entry entry = new Entry(Float.valueOf(stockQuote), i);
- //                       valsComp1.add(entry);
-
-                        Log.i("sortid", date);
+                        Log.i("sort1", stockQuote);
+                        valsComp1.add(new Entry(Float.valueOf(stockQuote), i));
+                        xVals.add("x");
                     }
+                    Log.i("sort1", "update3");
+                        LineChart chart = (LineChart) findViewById(R.id.chart);
+                        YAxis yAxis = chart.getAxisLeft();
+                        yAxis.setTextSize(15f);
+                        yAxis.setTextColor(Color.CYAN);
 
+                        XAxis xAxis = chart.getXAxis();
+                        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                        xAxis.setTextSize(15f);
+                        xAxis.setTextColor(Color.BLUE);
+                        xAxis.setDrawAxisLine(true);
+                        xAxis.setDrawGridLines(true);
+
+                        // Y-axis
+                        LineDataSet setComp = new LineDataSet(valsComp1, stock_symbol);
+                        setComp.setAxisDependency(YAxis.AxisDependency.LEFT);
+      //                  setComp.setColor(R.color.material_blue_500);
+
+                        // X-axis
+                        ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+                        dataSets.add(setComp);
+                    Log.i("sort1", "update4");
+                        LineData data = new LineData(xVals, dataSets);
+                        chart.setData(data);
+                    Log.i("sort1", "update5");
                 } else {
                     Log.i("sort1", "update Error");
+                    Log.i("sort1", response.raw().message());
                     // error response, no access to resource?
                 }
             }
@@ -75,33 +96,5 @@ public class StockDetailActivity extends Activity {
                 Log.d("sort1", t.getMessage());
             }
         });
-
-
-
-        xVals.add("1.Q");
-
-        LineChart chart = (LineChart) findViewById(R.id.chart);
-        YAxis leftAxis = chart.getAxisLeft();
-
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setTextSize(10f);
-        xAxis.setTextColor(Color.RED);
-        xAxis.setDrawAxisLine(true);
-        xAxis.setDrawGridLines(true);
-
-        // Y-axis
-        LineDataSet setComp1 = new LineDataSet(valsComp1, "Company 1");
-        setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
-
-        // X-axis
-        ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-        dataSets.add(setComp1);
-
-        LineData data = new LineData(xVals, dataSets);
-        chart.setData(data);
-        // chart.clear();
-
-        // chart.getLineData();
     }
 }
