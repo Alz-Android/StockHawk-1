@@ -33,7 +33,6 @@ public class StockDetailActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         final String stock_symbol = getIntent().getStringExtra("Stock");
 
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -45,8 +44,6 @@ public class StockDetailActivity extends Activity {
         final String startDateAPI = sdf1.format(cal.getTime());
         final String startDateUI = sdf2.format(cal.getTime());
         Log.i("sort1", startDateUI);
-
-
 
         // Get Historical data using Retrofit
         HistoricalDataStockApi stockService = ServiceGenerator.createService(HistoricalDataStockApi.class);
@@ -67,7 +64,6 @@ public class StockDetailActivity extends Activity {
                     Log.i("sort1", "update2");
                     for (int i = 0; i < response.body().query.results.quote.size(); i++) {
                         String stockQuote = response.body().query.results.quote.get(i).close;
-    //                    String date = response.body().query.results.quote.get(i).date;
                         Log.i("sort1", stockQuote);
                         valsComp1.add(new Entry(Float.valueOf(stockQuote), i));
                         if(i==0)

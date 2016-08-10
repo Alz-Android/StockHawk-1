@@ -29,7 +29,6 @@ public class ListViewWidgetService extends RemoteViewsService {
 
             public void onCreate() {
                 Log.i("ListViewWidgetService", "onCreate");
-
                 records = new ArrayList<StockObject>();
             }
 
@@ -48,7 +47,6 @@ public class ListViewWidgetService extends RemoteViewsService {
 //                else
 //                    rv.setInt(R.id.change, "setBackgroundColor",
 //                            R.drawable.percent_change_pill_red);
-
 
                 Intent fillInIntent = new Intent();
                 fillInIntent.setData(QuoteProvider.Quotes.CONTENT_URI);
