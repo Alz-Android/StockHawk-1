@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widget_list_item"
+    style="@style/WidgetBackground"
     android:background="#3f3f3f"
     android:layout_width="match_parent"
     android:layout_height="72dp"
