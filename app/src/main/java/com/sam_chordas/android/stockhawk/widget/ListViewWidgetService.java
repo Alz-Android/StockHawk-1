@@ -3,6 +3,7 @@ package com.sam_chordas.android.stockhawk.widget;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -26,7 +27,7 @@ public class ListViewWidgetService extends RemoteViewsService {
             private Cursor cursor = null;
             private ArrayList<StockObject> records;
 
-            private ArrayList<StockObject> stockArray = new ArrayList<StockObject>();
+//            private ArrayList<StockObject> stockArray = new ArrayList<StockObject>();
 
             // Initialize the data set.
             public void onCreate() {
@@ -52,12 +53,15 @@ public class ListViewWidgetService extends RemoteViewsService {
 
                 rv.setTextViewText(R.id.stock_symbol, records.get(position).getSymbol());
                 rv.setTextViewText(R.id.bid_price, records.get(position).getBidPrice());
-
                 rv.setTextViewText(R.id.change, records.get(position).getChange());
 
-                // end feed row
-                // Next, set a fill-intent, which will be used to fill in the pending intent template
-                // that is set on the collection view in ListViewWidgetProvider.
+//                if(records.get(position).GetIsUp())
+//                    rv.setInt(R.id.change, "setBackgroundColor",
+//                            R.drawable.percent_change_pill_green);
+//                else
+//                    rv.setInt(R.id.change, "setBackgroundColor",
+//                            R.drawable.percent_change_pill_red);
+
 
                 Intent fillInIntent = new Intent();
                 fillInIntent.setData(QuoteProvider.Quotes.CONTENT_URI);
@@ -84,7 +88,7 @@ public class ListViewWidgetService extends RemoteViewsService {
 
                 cursor = getContentResolver().query(
                         QuoteProvider.Quotes.CONTENT_URI,
-                        new String[]{QuoteColumns.SYMBOL, QuoteColumns.BIDPRICE, QuoteColumns.CHANGE},
+                        new String[]{QuoteColumns.SYMBOL, QuoteColumns.BIDPRICE, QuoteColumns.CHANGE, QuoteColumns.ISUP},
                         QuoteColumns.ISCURRENT + "= ?",
                         new String[]{"1"},
                         null);
@@ -95,7 +99,10 @@ public class ListViewWidgetService extends RemoteViewsService {
                 try {
                     cursor.moveToPosition(-1);
                     while (cursor.moveToNext()) {
-                            records.add(new StockObject(cursor.getString(0),cursor.getString(1),cursor.getString(2)) );
+                        records.add(new StockObject(cursor.getString(0),
+                                                    cursor.getString(1),
+                                                    cursor.getString(2),
+                                                    Boolean.valueOf(cursor.getString(3))));
                     }
                 } finally {
                     cursor.close();
