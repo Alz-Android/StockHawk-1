@@ -8,3 +8,14 @@ com.melnykov:floatingactionbutton:1.2.0
 com.github.PhilJay:MPAndroidChart:v2.2.5
 
 com.squareup.retrofit2:retrofit:2.0.0-beta4
+
+# Run Instructions
+clone the repo: git clone https://github.com/Alz-Android/StockHawk-1.git
+
+Open Android Studio and select Import Project
+
+Select the file build.gradle in the root of the cloned repo
+
+Select Run -> Run 'app' (or Debug 'app') from the menu bar
+
+Select the device you wish to run the app on and click 'OK'
